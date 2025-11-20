@@ -104,7 +104,15 @@ local function render_file_tree_recurse(depth, comp)
     )
   end
 
-  dir:add_text(ctx.name, "DiffviewFolderName")
+  if type(ctx.name) == "string" then
+    dir:add_text(ctx.name, "DiffviewFolderName")
+  elseif ctx.basename ~= nil then
+    -- directory that got changed into a file
+    dir:add_text(ctx.basename, "DiffviewStatusTypeChanged")
+  else
+    dir:add_text("<error>", "DiffviewStatusBroken")
+  end
+
   dir:ln()
 
   if not ctx.collapsed then
